@@ -25,6 +25,21 @@
     /*
       misc styles, nothing to do with CSS variables
     */
+    :root{
+      --base:#ffc600;
+      --blur:10px;
+      --spacing:10px;
+    }
+
+    img{
+      background:var(--base);
+      padding: var(--spacing);
+      filter:blur(var(--blur));
+    }
+
+    .hl{
+      color:var(--base);
+    }
 
     body {
       text-align: center;
@@ -45,6 +60,24 @@
   </style>
 
   <script>
+    // 获取input元素
+    const inputs = document.querySelectorAll('.controls input');
+    // 更新图片属性
+
+    function handleUpdate(){
+      // 添加后缀词，有单位则为单位，没有则为空
+      var suffix = this.dataset.sizing||'';
+      // ||操作符，前者为false，直接返回后者；前者为true，直接返回前者
+      // 设置css属性
+      document.documentElement.style.setProperty(`--${this.name}`,this.value+suffix);
+      // 此处this指代触发监听事件的input元素
+    }
+
+    // 给img设置监听事件
+    inputs.forEach(input => input.addEventListener('change',handleUpdate));
+    // mousemove反应慢，但是重新选择颜色后，鼠标移动到颜色选择框中能立刻变色，不用失去焦点。
+    inputs.forEach(input => input.addEventListener('mousemove',handleUpdate));
+    // 只使用mousemove时，颜色选择器失去焦点也不会变色，只有移动到颜色框才改变
   </script>
 
 </body>
