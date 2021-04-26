@@ -36,30 +36,81 @@
     ];
     
     // Array.prototype.filter()
-    // 1. Filter the list of inventors for those who were born in the 1500's
+    // 1. Filter the list of inventors for those who were born in the 1500's 
+    const fifteenth = inventors.filter(inventor => inventor.year>=1500&&inventor.year<1600);
+      console.table(fifteenth); 
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
+    const Flname = inventors.map(inventor => inventor.first+' '+inventor.last);
+    console.table(Flname);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    const oldToYoung = inventors.sort((a,b) =>  a.year-b.year);
+    console.table(oldToYoung);
 
     // Array.prototype.reduce()
-    // 4. How many years did all the inventors live all together?
+    // 4. How many years did all the inventors live all together? 
+    // const total = inventors.reduce((total,inventor)=> (inventor.passed-inventor.year)); 结果为 81
+    const total = inventors.reduce((total,inventor)=> {return total+(inventor.passed-inventor.year);},0);
+    console.log(total);
 
     // 5. Sort the inventors by years lived
+    const longevitySort = inventors.sort((a,b)=>(a.passed-a.year)-(b.passed-b.year));
+    console.table(longevitySort);
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
-
-
+    // 获取页面包含城市名的class数组
+    const category = document.querySelector('.mw-category');
+    //NodeList 转换成 ArrayList
+    // const links = [...category.querySelectorAll('a')];
+    const links = Array.from(category.querySelectorAll('a'));
+    // const links = document.querySelectorAll('.mw-category a');   两种写法一样
+    const de = links
+                    .map((link)=>link.textContent)
+                    .filter((deStree)=> deStree.includes('de'));
+    console.log(de);
+    
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    //根据last排序，直接排序
+    // const lastNameSort = people.sort((a,b)=>{ return a>b ? 1:-1}); 
+    //根据first name 排序，拆分成数组
+    const lastNameSort = people.sort((a,b)=>{
+      const [aFirst,aLast] = a.split(',');
+      const [bFirst,bLast] = b.split(',');
+      return aLast > bLast ? 1 : -1;
+    }); 
+
+    console.log(lastNameSort);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
+    // Way1: one by one
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    // const carNum = data.reduce((total,data)=> {return data==='car'?total+1:total},0);
+    // const truckNum = data.reduce((total,data)=> {return data==='truck'?total+1:total},0);  
+    // const bikeNum = data.reduce((total,data)=> {return data==="bike"?total+1:total},0); 
+    // const walkNum = data.reduce((total,data)=> {return data==="walk"?total+1:total},0); 
+    // const vanNum = data.reduce((total,data)=> {return data==="van"?total+1:total},0); 
+    // console.log(`car:${carNum}`);
+    // console.log(`truck:${truckNum}`);
+    // console.log(`bike:${bikeNum}`);
+    // console.log(`walk:${walkNum}`);
+    // console.log(`van:${vanNum}`);
 
+    //Way2: array
+    // 数据少，知道所有数据名字，利用属性 [car:0,truck:0,...]
+    // 数据多，不便给出所有数据名字，直接定义对象 {}
+    const totalNum = data.reduce((total,item)=>{
+      if(!total[item]) total[item]=0;
+      total[item]++;
+      return total;
+    },{});
+    console.log(totalNum);
+    
   </script>
 </body>
 </html>
